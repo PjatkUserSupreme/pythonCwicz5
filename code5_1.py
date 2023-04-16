@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 
+
 def save(students, filepath):  # punkt 5
     with open(filepath, "w") as file_object:
         for student in students:
@@ -78,16 +79,17 @@ def sendMail(students):
     for student in students:
         if student["gradeStatus"] == "GRADED":
             student["gradeStatus"] = "MAILED"
+            recipients = [student["email"]]
             msg = MIMEText("Gratulacje, twoja ocena to " + student["grade"])
             msg['Subject'] = "Oceny"
-            msg['From'] = "naprawdeEmailPjatka@gmail.com"
+            msg['From'] = ""
             msg['To'] = student["email"]
             smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
             smtp_server.login(sender, password)
             smtp_server.sendmail(sender, recipients, msg.as_string())
             smtp_server.quit()
-
-
+    print("Maile zostaly wyslane")
+    input("<<NACISNIJ ENTER ABY KONTYNUOWAC>>")
 
 
 students = list()
@@ -123,6 +125,7 @@ while True:
         students = deleteStudent(students)
         save(students, filepath)
     elif answer == "4":
-
+        sendMail(students)
+        save(students, filepath)
 
     print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
